@@ -1,0 +1,46 @@
+<!-- index.html -->
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>To-Do List</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <h1>To-Do List</h1>
+
+  <div>
+    <input type="text" id="title" placeholder="Título">
+    <input type="text" id="description" placeholder="Descripción">
+    <button onclick="createTask()">Agregar Tarea</button>
+  </div>
+
+  <ul id="tasks"></ul>
+
+  <script>
+    async function fetchTasks() {
+      const response = await fetch('/tasks');
+      const tasks = await response.json();
+      const taskList = document.getElementById('tasks');
+      taskList.innerHTML = '';
+      tasks.forEach(task => {
+        taskList.innerHTML += `<li>${task.title} - ${task.description}</li>`;
+      });
+    }
+
+    async function createTask() {
+      const title = document.getElementById('title').value;
+      const description = document.getElementById('description').value;
+      await fetch('/tasks', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ title, description })
+      });
+      fetchTasks();
+    }
+
+    window.onload = fetchTasks;
+  </script>
+</body>
+</html>
