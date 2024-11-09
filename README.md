@@ -1,7 +1,6 @@
-# Examen_Final
-Proyecto de examen final Universidad Regional de Guatemala
-Curso: PROGRAMACIÓN WEB Y BASES DE DATOS II
-CARRERA: ADMINISTRACIÓN DE SISTEMAS INFORMÁTICOS
-NOMBRE DEL CATEDRÁTICO: Luis Felipe Figueroa Molina
-
+# Examen_Final </br>
+Proyecto de examen final Universidad Regional de Guatemala</br>
+Curso: PROGRAMACIÓN WEB Y BASES DE DATOS II</br>
+CARRERA: ADMINISTRACIÓN DE SISTEMAS INFORMÁTICOS</br>
+NOMBRE DEL CATEDRÁTICO: Luis Felipe Figueroa Molina</br>
 
