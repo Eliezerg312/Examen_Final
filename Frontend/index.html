@@ -29,7 +29,7 @@
     tasks.forEach(task => {
       taskList.innerHTML += `
         <li>
-          ID: ${task.id} - ${task.title} - ${task.description}
+          ${task.title} - ${task.description}
           <button onclick="editTask(${task.id})">Editar</button>
           <button onclick="deleteTask(${task.id})">Eliminar</button>
         </li>
