@@ -19,27 +19,98 @@
   <ul id="tasks"></ul>
 
   <script>
-    async function fetchTasks() {
-      const response = await fetch('/tasks');
-      const tasks = await response.json();
-      const taskList = document.getElementById('tasks');
-      taskList.innerHTML = '';
-      tasks.forEach(task => {
-        taskList.innerHTML += `<li>${task.title} - ${task.description}</li>`;
-      });
-    }
+  // Función para obtener todas las tareas y mostrarlas
+  async function fetchTasks() {
+    const response = await fetch('/tasks');
+    const tasks = await response.json();
+    const taskList = document.getElementById('tasks');
+    taskList.innerHTML = '';
+    
+    tasks.forEach(task => {
+      taskList.innerHTML += `
+        <li>
+          ID: ${task.id} - ${task.title} - ${task.description}
+          <button onclick="editTask(${task.id})">Editar</button>
+          <button onclick="deleteTask(${task.id})">Eliminar</button>
+        </li>
+      `;
+    });
+  }
 
+    // Función para crear una tarea
     async function createTask() {
       const title = document.getElementById('title').value;
       const description = document.getElementById('description').value;
+
+      // Validar que no esté vacío
+      if (!title || !description) {
+        alert('El título y la descripción son necesarios.');
+        return;
+      }
+
       await fetch('/tasks', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ title, description })
       });
-      fetchTasks();
+
+      fetchTasks(); // Volver a cargar las tareas
     }
 
+// Función para editar una tarea
+async function editTask(id) {
+  const newTitle = prompt('Nuevo título:');
+  const newDescription = prompt('Nueva descripción:');
+
+  if (!newTitle || !newDescription) {
+    alert('El título y la descripción son necesarios.');
+    return;
+  }
+
+  try {
+    const response = await fetch(`/tasks/${id}`, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ title: newTitle, description: newDescription })
+    });
+
+    const data = await response.json();
+
+    if (response.ok) {
+      alert('Tarea actualizada correctamente');
+      fetchTasks();
+    } else {
+      alert(`Error: ${data.error || 'Ocurrió un error desconocido'}`);
+    }
+  } catch (error) {
+    alert('Error de conexión o al procesar la solicitud');
+    console.error(error);
+  }
+}
+
+// Función para eliminar una tarea
+async function deleteTask(id) {
+  if (confirm('¿Estás seguro de eliminar esta tarea?')) {
+    try {
+      const response = await fetch(`/tasks/${id}`, {
+        method: 'DELETE'
+      });
+
+      if (response.ok) {
+        alert('Tarea eliminada correctamente');
+        fetchTasks();
+      } else {
+        const data = await response.json();
+        alert(`Error: ${data.error || 'Ocurrió un error desconocido'}`);
+      }
+    } catch (error) {
+      alert('Error de conexión o al procesar la solicitud');
+      console.error(error);
+    }
+  }
+}
+
+    // Cargar las tareas cuando se cargue la página
     window.onload = fetchTasks;
   </script>
 </body>
